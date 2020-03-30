@@ -5,11 +5,12 @@
   "main": "build/index.js",
   "scripts": {
     "dev": "nodemon --config",
-    "start": "NODE_ENV=production node build",
+    "start": "npm run build && NODE_ENV=production node build",
     "build": "tsc",
     "smoke": "node smoke",
     "permissions:validate": "ts-node src/db/scripts/allEnvPermissionSync.ts && ts-node src/db/scripts/validatePermissions.ts",
-    "permissions:print": "ts-node src/db/scripts/allEnvPermissionSync.ts"
+    "permissions:print": "ts-node src/db/scripts/allEnvPermissionSync.ts",
+    "deploy:staging": "git checkout master && git pull && git push staging master"
   },
   "author": "",
   "license": "ISC",
