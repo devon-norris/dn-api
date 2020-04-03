@@ -36,7 +36,7 @@ interface Config {
 
 let config: Config = {
   port: PORT,
-  origin: 'http://localhost',
+  origin: 'http://localhost:3000',
   tokenSecret: TOKEN_SECRET,
   cookie: {
     secret: COOKIE_SECRET,
