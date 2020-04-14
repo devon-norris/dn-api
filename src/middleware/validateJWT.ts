@@ -19,8 +19,8 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
     return sendError({
       res,
       status: 401,
-      message: 'Unauthorized',
-      error: 'Invalid token',
+      message: 'Invalid token',
+      error: 'Unauthorized',
     })
 
   res.cookie(ACCESS_TOKEN, accessToken, cookieConfig)

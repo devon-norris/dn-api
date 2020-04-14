@@ -23,14 +23,14 @@ export const accessDenied = (res: Response): Response =>
   sendError({
     res,
     status: 403,
-    message: 'Access denied',
-    error: 'You do not have permission for the requested resource',
+    message: 'You do not have permission for the requested resource',
+    error: 'Access denied',
   })
 
 export const notFound = (res: Response): Response =>
   sendError({
     res,
     status: 404,
-    message: 'Not found',
-    error: 'Could not find the requested resource',
+    message: 'Could not find the requested resource',
+    error: 'Not found',
   })
