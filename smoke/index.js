@@ -521,6 +521,12 @@ const superAdminAccess = async () => {
   // Permissions
   res = await api({ url: '/permissions', method: 'get', token })
   expect(res, 200, 'GET permissions success')
+  res = await api({ url: '/permissions', method: 'post', token })
+  expect(res, 404, 'post permissions not found')
+  res = await api({ url: '/permissions', method: 'put', token })
+  expect(res, 404, 'put permissions not found')
+  res = await api({ url: '/permissions', method: 'delete', token })
+  expect(res, 404, 'delete permissions not found')
 }
 
 const userModel = async () => {
