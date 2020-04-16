@@ -12,6 +12,7 @@ const user: Routes = {
 const routes: Routes = {
   health: '/health',
   organizations: '/organizations',
+  permissions: '/permissions',
   ...user,
 }
 

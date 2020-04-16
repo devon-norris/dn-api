@@ -268,6 +268,10 @@ const noTokenAccess = async () => {
   expect(res, 401, 'invalid token for orgs')
   res = await api({ url: '/organizations/123', method: 'delete' })
   expect(res, 401, 'invalid token for orgs')
+
+  // Permissions
+  res = await api({ url: '/permissions', method: 'get' })
+  expect(res, 401, 'invalid token for permissions')
 }
 
 const userAccess = async () => {
@@ -326,6 +330,10 @@ const userAccess = async () => {
   // Long lived token
   res = await api({ url: '/users/longLivedToken', method: 'post', token })
   expect(res, 403, 'user getting long lived token access denied')
+
+  // Permissions
+  res = await api({ url: '/permissions', method: 'get', token })
+  expect(res, 403, 'GET permissions access denied')
 }
 
 const adminAccess = async () => {
@@ -385,6 +393,10 @@ const adminAccess = async () => {
   // Long lived token
   res = await api({ url: '/users/longLivedToken', method: 'post', token })
   expect(res, 403, 'admin getting long lived token access denied')
+
+  // Permissions
+  res = await api({ url: '/permissions', method: 'get', token })
+  expect(res, 403, 'GET permissions access denied')
 }
 
 const orgAdminAccess = async () => {
@@ -444,6 +456,10 @@ const orgAdminAccess = async () => {
   // Long lived token
   res = await api({ url: '/users/longLivedToken', method: 'post', token })
   expect(res, 403, 'orgadmin getting long lived token access denied')
+
+  // Permissions
+  res = await api({ url: '/permissions', method: 'get', token })
+  expect(res, 403, 'GET permissions access denied')
 }
 
 const superAdminAccess = async () => {
@@ -501,6 +517,10 @@ const superAdminAccess = async () => {
   // Long lived token
   res = await api({ url: '/users/longLivedToken', method: 'post', token })
   expect(res, 200, 'super getting long lived token success')
+
+  // Permissions
+  res = await api({ url: '/permissions', method: 'get', token })
+  expect(res, 200, 'GET permissions success')
 }
 
 const userModel = async () => {

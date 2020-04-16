@@ -17,8 +17,13 @@ const organization: Permissions = {
   organizations_d: 'organizations_d',
 }
 
+const permissions: Permissions = {
+  permissions_r: 'permissions_r',
+}
+
 export default {
   pub: 'public',
   ...user,
   ...organization,
+  ...permissions,
 } as Permissions

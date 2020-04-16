@@ -1,5 +1,6 @@
 import Users from './models/users'
 import Organizations from './models/organizations'
+import Permissions from './models/permissions'
 
 export default (model: string): any => {
   switch (model) {
@@ -7,6 +8,8 @@ export default (model: string): any => {
       return Users
     case 'organizations':
       return Organizations
+    case 'permissions':
+      return Permissions
     default:
       return null
   }

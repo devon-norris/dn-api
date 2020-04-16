@@ -10,15 +10,15 @@ const { environments } = dbConfig
 
 // Modify between lines
 // -----------------------------------
-const { users_u } = allPermisisons
+const { permissions_r } = allPermisisons
 const permissions: Permission[] = [
   {
-    name: users_u,
-    roles: [user, admin, orgAdmin],
+    name: permissions_r,
+    roles: [],
   },
 ]
 
-const action = modify
+const action = add
 // -----------------------------------
 
 const runScript = async (): Promise<void> => {

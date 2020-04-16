@@ -19,9 +19,18 @@ const {
   organizations_u,
   organizations_d,
   longLivedToken_c,
+  permissions_r,
 } = permissions
 
-const { health, users, usersAuthenticate, usersLogout, organizations, longLivedToken } = routes
+const {
+  health,
+  users,
+  usersAuthenticate,
+  usersLogout,
+  organizations,
+  longLivedToken,
+  permissions: permissionsRoute,
+} = routes
 
 const user = {
   [users]: { GET: [users_r], POST: [pub], PUT: [users_u], DELETE: [users_d] } as RoutePermissions,
@@ -39,8 +48,13 @@ const organization = {
   } as RoutePermissions,
 }
 
+const permission = {
+  [permissionsRoute]: { GET: [permissions_r] } as RoutePermissions,
+}
+
 export default {
   [health]: { GET: [pub] } as RoutePermissions,
   ...user,
   ...organization,
+  ...permission,
 } as RoutePermissions
