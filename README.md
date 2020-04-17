@@ -54,3 +54,12 @@ Tail logs
 ```
 heroku logs --tail --remote [environment]
 ```
+
+TODO:
+
+RE-WRITE smoke tests
+
+- create separate files for everything
+- at the end, throw error if errors array is not empty
+
+Create cross org tests

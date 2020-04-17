@@ -11,8 +11,8 @@
     "permissions:validate": "ts-node src/db/scripts/allEnvPermissionSync.ts && ts-node src/db/scripts/validatePermissions.ts",
     "permissions:print": "ts-node src/db/scripts/allEnvPermissionSync.ts",
     "permissions:add": "ts-node src/db/scripts/addPermissions.ts",
-    "deploy:staging": "git checkout master && git pull && git push staging master",
-    "deploy:production": "git checkout master && git pull && git push production master",
+    "deploy:staging": "git checkout master && git pull && node smoke && git push staging master",
+    "deploy:production": "git checkout master && git pull && node smoke && git push production master",
     "restart:staging": "heroku restart --remote staging",
     "logs:staging": "heroku logs --tail --remote staging",
     "logs:production": "heroku logs --tail --remote production"
