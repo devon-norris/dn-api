@@ -7,7 +7,8 @@ import { Request, Response, NextFunction } from '../../types'
 import isMongoId from '../../util/isMongoId'
 
 const extractRoute = (originalUrl: string): string => {
-  const urlArr = originalUrl.split('/')
+  const urlMinusQuery = originalUrl.split('?')[0]
+  const urlArr = urlMinusQuery.split('/')
   const lastStr = urlArr[urlArr.length - 1] || ''
   const lastStrIsId = isMongoId(lastStr)
   if (lastStrIsId) urlArr.pop()

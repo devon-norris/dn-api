@@ -58,7 +58,7 @@ router.post(
   (req: Request, res: Response): Response => {
     res.clearCookie(ACCESS_TOKEN, cookieConfig)
     res.clearCookie(REFRESH_TOKEN, cookieConfig)
-    return sendSuccess({ res, status: 204 })
+    return sendSuccess({ res, status: 204, data: {} })
   }
 )
 

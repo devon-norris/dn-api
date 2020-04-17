@@ -1,11 +1,30 @@
 import { Response } from '../types'
+import { crossOrgError } from '../db/modelSelect'
 
-interface ResponseParams {
+interface SuccessResponseParams {
   res: Response
   status?: number
   message?: string
-  data?: any
+  data: any
+}
+
+interface ErrorResponseParams {
+  res: Response
+  status?: number
+  message?: string
   error?: string
+}
+
+interface SuccessResponseBody {
+  status: string
+  message: string
+  data: any
+}
+
+interface ErrorResponseBody {
+  status: string
+  message: string
+  error: string
 }
 
 const statusType = {
@@ -13,24 +32,40 @@ const statusType = {
   ERROR: 'error',
 }
 
-export const sendSuccess = ({ res, status = 200, message = '', data = {} }: ResponseParams): Response =>
-  res.status(status).send({ status: statusType.SUCCESS, message, data })
+// -------------- CUSTOM --------------
 
-export const sendError = ({ res, status = 500, message = '', error = 'Server Error' }: ResponseParams): Response =>
-  res.status(status).send({ status: statusType.ERROR, message, error })
-
-export const accessDenied = (res: Response): Response =>
-  sendError({
-    res,
-    status: 403,
+export const accessDenied = (res: Response): Response => {
+  const responseBody: ErrorResponseBody = {
+    status: statusType.ERROR,
     message: 'You do not have permission for the requested resource',
     error: 'Access denied',
-  })
+  }
+  return res.status(403).send(responseBody)
+}
 
-export const notFound = (res: Response): Response =>
-  sendError({
-    res,
-    status: 404,
+export const notFound = (res: Response): Response => {
+  const responseBody: ErrorResponseBody = {
+    status: statusType.ERROR,
     message: 'Could not find the requested resource',
     error: 'Not found',
-  })
+  }
+  return res.status(404).send(responseBody)
+}
+
+// -------------- GENERIC --------------
+
+export const sendSuccess = ({ res, status = 200, message = '', data = {} }: SuccessResponseParams): Response => {
+  const responseBody: SuccessResponseBody = { status: statusType.SUCCESS, message, data }
+  return res.status(status).send(responseBody)
+}
+
+export const sendError = ({
+  res,
+  status = 500,
+  message = '',
+  error = 'Server Error',
+}: ErrorResponseParams): Response => {
+  if (error.toString().includes(crossOrgError)) return accessDenied(res)
+  const responseBody: ErrorResponseBody = { status: statusType.ERROR, message, error }
+  return res.status(status).send(responseBody)
+}

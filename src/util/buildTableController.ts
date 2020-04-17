@@ -1,4 +1,4 @@
-import modelSelect from '../db/modelSelect'
+import modelSelect, { Service } from '../db/modelSelect'
 import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
@@ -7,6 +7,7 @@ import { AccessTokenPayload } from './token/generateToken'
 import { sendSuccess, sendError } from '../util/responses'
 import { Request, Response, Router, NextFunction } from '../types'
 import isMongoId from '../util/isMongoId'
+import determineCrossOrgPermission from '../middleware/permissions/determineCrossOrgPermission'
 
 interface MethodOptions {
   validate?: Function
@@ -58,9 +59,16 @@ const handleResponseOmit = (data: any, omit: string[]): any => {
   return (data = _isArray(data) ? data.map(obj => _omit(obj, omit)) : _omit(data, omit))
 }
 
+const getService = (req: Request, model: string): Service => {
+  const orgId = _get(req, 'user.orgId')
+  const role = _get(req, 'user.role')
+  const hasCrossOrgPermission = determineCrossOrgPermission(role)
+  const service = modelSelect({ model, orgId, hasCrossOrgPermission })
+  if (!service) throw new Error('Invalid Service')
+  return service
+}
+
 export default ({ router, model, get, post, put, del }: BuildControllerParams): void => {
-  const service = modelSelect(model)
-  if (!service) throw new Error('Invalid Model')
   const childLogger = logger.child({ service: model })
 
   if (get !== undefined) {
@@ -75,7 +83,9 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           if (!isValid) return sendError({ res, message, status })
 
           // Handle data
-          let data = await service.find()
+          const service = getService(req, model)
+          const { orgId } = req.query
+          let data = orgId ? await service.find({ orgId }) : await service.find()
           data = handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
@@ -96,6 +106,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           if (!isValid) return sendError({ res, message, status })
 
           // Handle data
+          const service = getService(req, model)
           let data = await service.findById(id)
           data = handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
@@ -126,7 +137,8 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           body = _omit(body, bodyOmit)
 
           // Handle data
-          let data = await new service(body).save()
+          const service = getService(req, model)
+          let data = await service.create(body)
           data = handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data, status: 201 })
         } catch (err) {
@@ -158,6 +170,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           body = _omit(body, bodyOmit)
 
           // Handle data
+          const service = getService(req, model)
           let data = await service.findByIdAndUpdate(id, body)
           data = handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
@@ -183,6 +196,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           if (!isValid) return sendError({ res, message, status })
 
           // Handle data
+          const service = getService(req, model)
           let data = await service.findByIdAndDelete(id)
           data = handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
