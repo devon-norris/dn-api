@@ -3,10 +3,11 @@ const getTestUsers = require('./getTestUsers')
 const ensureTestOrgsExist = require('./ensureTestOrgsExist')
 const _find = require('lodash/find')
 const _filter = require('lodash/filter')
+const _get = require('lodash/get')
 const config = require('../config')
 const { token } = config.testSuperAdmin
 const { testUsers1, testUsers2 } = require('../config/testUsers')
-const configTestUsers = [testUsers1, testUsers2]
+const configTestUsers = [...Object.values(testUsers1), ...Object.values(testUsers2)]
 
 const createSingleTestUser = async user => {
   const { fName, lName, email, password, role, orgId } = user
@@ -14,7 +15,7 @@ const createSingleTestUser = async user => {
   return api({ url: '/users', method: 'post', token, body })
 }
 
-const createTestUsers = ({ currentUsers, currentOrgs, testUsers, findOne }) => {
+const createTestUsers = async ({ currentUsers, currentOrgs, testUsers, findOne }) => {
   const usersToCreate = []
   const responses = []
 
@@ -33,7 +34,9 @@ const createTestUsers = ({ currentUsers, currentOrgs, testUsers, findOne }) => {
   return findOne ? responses[0] : responses
 }
 
-module.exports = async ({ email, orgEmail }) => {
+module.exports = async options => {
+  const email = _get(options, 'email')
+  const orgEmail = _get(options, 'orgEmail')
   const currentUsers = await getTestUsers()
   const currentOrgs = await ensureTestOrgsExist()
   let testUsers = configTestUsers

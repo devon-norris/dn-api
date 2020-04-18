@@ -2,6 +2,7 @@ const api = require('../api')
 const getTestUsers = require('./getTestUsers')
 const getOrgId = require('./getOrgId')
 const _filter = require('lodash/filter')
+const _get = require('lodash/get')
 const config = require('../config')
 const { token } = config.testSuperAdmin
 
@@ -18,7 +19,9 @@ const deleteTestUsers = async ({ testUsersToDelete, findOne }) => {
   return findOne ? responses[0] : responses
 }
 
-module.exports = async ({ email, orgEmail }) => {
+module.exports = async options => {
+  const email = _get(options, 'email')
+  const orgEmail = _get(options, 'orgEmail')
   const currentUsers = await getTestUsers()
   let testUsersToDelete = currentUsers
   const findOne = !!email

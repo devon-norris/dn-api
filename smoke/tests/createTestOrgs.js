@@ -17,7 +17,7 @@ module.exports = async () => {
   })
 
   // Should not be able to create duplicates
-  for await (configTestOrg of configTestOrgs) {
+  for await (const configTestOrg of configTestOrgs) {
     const res = await api({ url: '/organizations', method: 'post', token, body: configTestOrg })
     expect({ res, expectedStatus: 500, description: 'Org already exists, duplicate key', errors })
   }
