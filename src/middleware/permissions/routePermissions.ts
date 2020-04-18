@@ -49,7 +49,12 @@ const organization = {
 }
 
 const permission = {
-  [permissionsRoute]: { GET: [permissions_r] } as RoutePermissions,
+  [permissionsRoute]: {
+    GET: [permissions_r],
+    POST: [permissions_r],
+    PUT: [permissions_r],
+    DELETE: [permissions_r],
+  } as RoutePermissions,
 }
 
 export default {

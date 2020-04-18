@@ -4,7 +4,8 @@ const { environments } = dbConfig
 const { SERVER_ENV = '' } = process.env
 // @ts-ignore
 if (!environments[SERVER_ENV]) throw new Error('Invalid SERVER_ENV')
-if (SERVER_ENV === environments.development) {
+const isDevelopment = SERVER_ENV === environments.development
+if (isDevelopment) {
   require('dotenv').config()
 }
 
@@ -32,6 +33,7 @@ interface Config {
     }
   }
   loggingFormat: string
+  isDevelopment: boolean
 }
 
 let config: Config = {
@@ -48,6 +50,7 @@ let config: Config = {
     config: dbConfig.options,
   },
   loggingFormat: 'dev',
+  isDevelopment,
 }
 
 if (SERVER_ENV === environments.staging) {
