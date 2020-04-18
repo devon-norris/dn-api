@@ -6,9 +6,8 @@ const { token } = testSuperAdmin
 
 module.exports = async ({ email, orgId }) => {
   const url = orgId ? `/users?orgId=${orgId}` : '/users'
-  const emailFilter = email ? email : configUser.email
   const { data } = await api({ url: url, method: 'get', token })
   const findOne = !!email
-  const returnData = _filter(data, { email: emailFilter })
+  const returnData = email ? _filter(data, { email }) : data.filter(({ email }) => email.includes(configUser.email))
   return findOne ? returnData[0] : returnData
 }
