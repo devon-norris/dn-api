@@ -1,29 +1,16 @@
-interface Permissions {
-  [permission: string]: string
-}
-
-const user: Permissions = {
+export default {
+  PUBLIC: 'public',
+  longLivedToken_c: 'longLivedToken_c',
+  // Users
   users_c: 'users_c',
   users_r: 'users_r',
   users_u: 'users_u',
   users_d: 'users_d',
-  longLivedToken_c: 'longLivedToken_c',
-}
-
-const organization: Permissions = {
+  // Organizations
   organizations_c: 'organizations_c',
   organizations_r: 'organizations_r',
   organizations_u: 'organizations_u',
   organizations_d: 'organizations_d',
-}
-
-const permissions: Permissions = {
+  // Permissions
   permissions_r: 'permissions_r',
 }
-
-export default {
-  pub: 'public',
-  ...user,
-  ...organization,
-  ...permissions,
-} as Permissions

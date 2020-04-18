@@ -29,7 +29,7 @@ const hasPermission = (userPermissions: string[], methodPermissions: string[]): 
   methodPermissions.some(methodPerm => userPermissions.some(userPerm => methodPerm === userPerm))
 
 export const isPublicRoute = (methodPermissions: string[]): boolean =>
-  methodPermissions.some(permission => permission === permissions.pub)
+  methodPermissions.some(permission => permission === permissions.PUBLIC)
 
 export default ({ originalUrl, method, user }: Request, res: Response, next: NextFunction): void | Response => {
   const userPermissions = user?.permissions || []

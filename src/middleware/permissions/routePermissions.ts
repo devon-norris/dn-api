@@ -1,17 +1,14 @@
 import permissions from './permissions'
 import routes from './routes'
-
 export interface RoutePermissions {
-  [route: string]: {
-    GET?: string[]
-    POST?: string[]
-    PUT?: string[]
-    DELETE?: string[]
-  }
+  GET?: string[]
+  POST?: string[]
+  PUT?: string[]
+  DELETE?: string[]
 }
 
 const {
-  pub,
+  PUBLIC,
   users_r,
   users_u,
   users_d,
@@ -32,23 +29,21 @@ const {
   permissions: permissionsRoute,
 } = routes
 
-const user = {
-  [users]: { GET: [users_r], POST: [pub], PUT: [users_u], DELETE: [users_d] } as RoutePermissions,
-  [usersAuthenticate]: { GET: [users_r], POST: [pub] } as RoutePermissions,
-  [usersLogout]: { POST: [pub] } as RoutePermissions,
+export default {
+  [health]: { GET: [PUBLIC] } as RoutePermissions,
   [longLivedToken]: { POST: [longLivedToken_c] } as RoutePermissions,
-}
-
-const organization = {
+  // Users
+  [users]: { GET: [users_r], POST: [PUBLIC], PUT: [users_u], DELETE: [users_d] } as RoutePermissions,
+  [usersAuthenticate]: { GET: [users_r], POST: [PUBLIC] } as RoutePermissions,
+  [usersLogout]: { POST: [PUBLIC] } as RoutePermissions,
+  // Organizations
   [organizations]: {
-    GET: [pub],
+    GET: [PUBLIC],
     POST: [organizations_c],
     PUT: [organizations_u],
     DELETE: [organizations_d],
   } as RoutePermissions,
-}
-
-const permission = {
+  // Permissions
   [permissionsRoute]: {
     GET: [permissions_r],
     POST: [permissions_r],
@@ -56,10 +51,3 @@ const permission = {
     DELETE: [permissions_r],
   } as RoutePermissions,
 }
-
-export default {
-  [health]: { GET: [pub] } as RoutePermissions,
-  ...user,
-  ...organization,
-  ...permission,
-} as RoutePermissions

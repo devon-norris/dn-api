@@ -25,7 +25,7 @@ const validatePermissions = async (): Promise<void> => {
   const dbPermissions = await Permissions.find()
   const dbPermissionNames = dbPermissions.map(perm => _get(perm, 'name', ''))
   const superAdminInEveryDbPerm = dbPermissions.every(perm => hasSuperAdminPerm(_get(perm, 'roles', [])))
-  const codePermissions = Object.values(permissions).filter(perm => perm !== 'public')
+  const codePermissions = Object.values(permissions).filter(perm => perm !== permissions.PUBLIC)
 
   const codePermsEqualDbPerms = isEqualPerms(codePermissions, dbPermissionNames)
 

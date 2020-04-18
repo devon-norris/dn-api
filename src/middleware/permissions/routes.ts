@@ -1,19 +1,12 @@
-interface Routes {
-  [route: string]: string
-}
-
-const user: Routes = {
+export default {
+  health: '/health',
+  longLivedToken: '/users/longLivedToken',
+  // Users
   users: '/users',
   usersAuthenticate: '/users/authenticate',
   usersLogout: '/users/logout',
-  longLivedToken: '/users/longLivedToken',
-}
-
-const routes: Routes = {
-  health: '/health',
-  organizations: '/organizations',
+  // Permissions
   permissions: '/permissions',
-  ...user,
+  // Organizations
+  organizations: '/organizations',
 }
-
-export default routes as Routes
