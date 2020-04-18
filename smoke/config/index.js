@@ -20,4 +20,5 @@ module.exports = {
     oneEmail: 'testsuperadmin1@test.com',
     twoEmail: 'testsuperadmin2@test.com',
   },
+  secret: 'secret',
 }

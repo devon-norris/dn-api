@@ -59,6 +59,9 @@ TODO:
 
 RE-WRITE smoke tests
 
+deleteTestUsers
+deleteTestOrgs
+
 - create separate files for everything
 - at the end, throw error if errors array is not empty
 
