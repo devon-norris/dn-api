@@ -2,6 +2,7 @@ import modelSelect, { Service } from '../db/modelSelect'
 import _isArray from 'lodash/isArray'
 import _omit from 'lodash/omit'
 import _get from 'lodash/get'
+import _isNil from 'lodash/isNil'
 import logger from '../util/logger'
 import { AccessTokenPayload } from './token/generateToken'
 import { sendSuccess, sendError } from '../util/responses'
@@ -175,6 +176,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           // Handle data
           const service = getService(req, model)
           let data = await service.findByIdAndUpdate(id, body)
+          if (_isNil(data)) return sendError({ res, message: 'Resource not found', status: 404 })
           data = handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
@@ -202,6 +204,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           // Handle data
           const service = getService(req, model)
           let data = await service.findByIdAndDelete(id)
+          if (_isNil(data)) return sendError({ res, message: 'Resource not found', status: 404 })
           data = handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {

@@ -1,4 +1,5 @@
 const generateTestUsers = require('../utils/generateTestUsers')
+const deleteTestUsers = require('../utils/deleteTestUsers')
 const getTestOrgs = require('../utils/getTestOrgs')
 const expect = require('../utils/expect')
 const { testUsers1, testUsers2 } = require('../config/testUsers')
@@ -11,6 +12,9 @@ const configTestUsers = [...Object.values(testUsers1), ...Object.values(testUser
 
 module.exports = async () => {
   const errors = []
+
+  // Cleanup previous users
+  await deleteTestUsers()
 
   // Create test users success
   const testUsersRes = await generateTestUsers()
