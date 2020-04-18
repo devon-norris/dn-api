@@ -67,7 +67,8 @@ export const modifyUsersValidator = async ({
   // Validate access level
   const dbUser = await Users.findById(userId)
   const dbUserToModify = await Users.findById(userToModifyId)
-  if (!dbUser || !dbUserToModify) return accessDeniedResponse('Requesting user unknown')
+  if (!dbUserToModify) return { isValid: false, message: 'Resource not found', status: 404 }
+  if (!dbUser) return accessDeniedResponse('Requesting user unknown')
   const userAccessLevel = getAccessLevel(dbUser)
   const userToModifyAccessLevel = getAccessLevel(dbUserToModify)
   if (userAccessLevel === -1 || userToModifyAccessLevel === -1) return invalidFieldResponse('Invalid Role')

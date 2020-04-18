@@ -2,12 +2,10 @@ const generateTestUsers = require('../utils/generateTestUsers')
 const deleteTestOrgs = require('../utils/deleteTestOrgs')
 const deleteTestUsers = require('../utils/deleteTestUsers')
 const expect = require('../utils/expect')
-const { testOrg1, testOrg2 } = require('../config/testOrganizations')
 const api = require('../api')
 const printMsg = require('../utils/printMsg')
 const config = require('../config')
 const { token } = config.testSuperAdmin
-const configTestOrgs = [testOrg1, testOrg2]
 
 module.exports = async () => {
   const errors = []
@@ -34,7 +32,7 @@ module.exports = async () => {
     res: routeNotFoundRes,
     expectedStatus: 404,
     description: 'Route not found - DELETE /organizations (no :id)',
-    token,
+    errors,
   })
 
   // Invalid orgId
@@ -43,7 +41,7 @@ module.exports = async () => {
     res: invalidOrgIdRes,
     expectedStatus: 500,
     description: 'Delete Org invalid mongo id - 123',
-    token,
+    errors,
   })
 
   // Cannot delete an org that doesn't exist
@@ -52,7 +50,7 @@ module.exports = async () => {
     res: orgDoesNotExistRes,
     expectedStatus: 404,
     description: 'Delete Org - resource not found',
-    token,
+    errors,
   })
 
   printMsg({ errors, msg: 'Delete test organizations' })
