@@ -8,5 +8,7 @@ module.exports = async ({ email, orgId }) => {
   const url = orgId ? `/users?orgId=${orgId}` : '/users'
   const emailFilter = email ? email : configUser.email
   const { data } = await api({ url: url, method: 'get', token })
-  return _filter(data, { email: emailFilter })
+  const findOne = !!email
+  const returnData = _filter(data, { email: emailFilter })
+  return findOne ? returnData[0] : returnData
 }
