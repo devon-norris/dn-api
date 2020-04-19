@@ -6,20 +6,23 @@ const mergeErrors = require('./utils/mergeErrors')
 const createTestOrgsErrors = [],
   createTestUsersErrors = [],
   deleteTestOrgsErrors = [],
-  deleteTestUsersErrors = []
+  deleteTestUsersErrors = [],
+  userModelErrors = []
 
 // Import test suites
 const createTestOrgs = require('./tests/createTestOrgs')
 const createTestUsers = require('./tests/createTestUsers')
 const deleteTestOrgs = require('./tests/deleteTestOrgs')
 const deleteTestUsers = require('./tests/deleteTestUsers')
+const userModel = require('./tests/models/user')
 
 const smokeTests = async () => {
+  // Model Tests
+  const userModelErrors = await userModel()
+
   // Create Orgs and Users
   const createTestOrgsErrors = await createTestOrgs()
   const createTestUsersErrors = await createTestUsers()
-
-  // Model Tests
 
   // Access Control Tests
 
@@ -27,7 +30,15 @@ const smokeTests = async () => {
   const deleteTestOrgsErrors = await deleteTestOrgs()
   const deleteTestUsersErrors = await deleteTestUsers()
 
-  handleErrors(mergeErrors(createTestOrgsErrors, createTestUsersErrors, deleteTestOrgsErrors, deleteTestUsersErrors))
+  handleErrors(
+    mergeErrors(
+      createTestOrgsErrors,
+      createTestUsersErrors,
+      deleteTestOrgsErrors,
+      deleteTestUsersErrors,
+      userModelErrors
+    )
+  )
 }
 
 smokeTests()

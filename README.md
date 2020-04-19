@@ -59,8 +59,10 @@ TODO:
 
 RE-WRITE smoke tests
 
-- create separate files for everything
-- at the end, throw error if errors array is not empty
+- org model test
+- permission model test?
+- access control tests
 - Create cross org tests
 
 Finish permissions service
+Write permissions tests
