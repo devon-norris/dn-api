@@ -7,7 +7,8 @@ const createTestOrgsErrors = [],
   createTestUsersErrors = [],
   deleteTestOrgsErrors = [],
   deleteTestUsersErrors = [],
-  userModelErrors = []
+  userModelErrors = [],
+  organizationModelErrors = []
 
 // Import test suites
 const createTestOrgs = require('./tests/createTestOrgs')
@@ -15,10 +16,12 @@ const createTestUsers = require('./tests/createTestUsers')
 const deleteTestOrgs = require('./tests/deleteTestOrgs')
 const deleteTestUsers = require('./tests/deleteTestUsers')
 const userModel = require('./tests/models/user')
+const organizationModel = require('./tests/models/organization')
 
 const smokeTests = async () => {
   // Model Tests
   const userModelErrors = await userModel()
+  const organizationModelErrors = await organizationModel()
 
   // Create Orgs and Users
   const createTestOrgsErrors = await createTestOrgs()
@@ -36,7 +39,8 @@ const smokeTests = async () => {
       createTestUsersErrors,
       deleteTestOrgsErrors,
       deleteTestUsersErrors,
-      userModelErrors
+      userModelErrors,
+      organizationModelErrors
     )
   )
 }
