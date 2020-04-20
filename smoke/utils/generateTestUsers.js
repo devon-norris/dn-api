@@ -40,7 +40,7 @@ module.exports = async options => {
   const currentUsers = await getTestUsers()
   const currentOrgs = await ensureTestOrgsExist()
   let testUsers = configTestUsers
-  const findOne = !!email || !!orgEmail
+  const findOne = !!email
 
   if (email) testUsers = _filter(configTestUsers, { email })
   if (orgEmail) testUsers = _filter(configTestUsers, { orgEmail })

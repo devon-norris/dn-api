@@ -11,7 +11,7 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
   const { isValid, accessToken, refreshToken, user } = await validateToken(req)
   req.user = user
 
-  if (_isEmpty(routeMethodPermissions)) return notFound(res)
+  if (_isEmpty(routeMethodPermissions) && isValid) return notFound(res)
 
   if (isPublicRoute(routeMethodPermissions)) return next()
 
