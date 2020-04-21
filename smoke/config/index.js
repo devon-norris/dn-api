@@ -21,11 +21,13 @@ module.exports = {
       email: 'testsuperadmin1@test.com',
       id: '5e7170583bb94a5bff067451',
       orgId: '5e6c1d2f0cc7f63c95a08be6',
+      password: 'devotoT@17',
     },
     two: {
       email: 'testsuperadmin2@test.com',
       id: '5e72a0d14447f34de512c1ef',
       orgId: '5e6c1d2f0cc7f63c95a08be6',
+      password: 'devotoT@17',
     },
   },
   secret: 'secret',

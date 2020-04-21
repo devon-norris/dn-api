@@ -48,7 +48,6 @@ const deleteTestUserSample = async () => {
 module.exports = async ({ user = {}, description }) => {
   const testOrgs = await ensureTestOrgsExist()
   const testOrg1Id = _find(testOrgs, { email: configTestOrg1.email })._id
-  const testOrg2Id = _find(testOrgs, { email: configTestOrg2.email })._id // need?
   const superadminToModifyId = testSuperAdmin.two.id
   await deleteTestUserSample()
 
@@ -78,8 +77,8 @@ module.exports = async ({ user = {}, description }) => {
   const getIdCrossOrgRes = await api({ url: `${baseUrl}/${testSuperAdmin.two.id}`, method: 'get', token })
   expect({
     res: getIdCrossOrgRes,
-    expectedStatus: token ? 403 : 401,
-    description: `GET ID ${baseUrl} - ${description}`,
+    expectedStatus: token ? (role === 'superadmin' ? 200 : 403) : 401,
+    description: `GET ID ${baseUrl} - ${description} - cross org`,
     errors,
   })
 
@@ -298,49 +297,61 @@ module.exports = async ({ user = {}, description }) => {
   const testUsers1Res_3 = await generateTestUsers({ orgEmail: configTestOrg1.email })
   const testUsersOrg1_3 = testUsers1Res_3.map(({ data }) => data)
   // ID's
-  const userToModifyId_3 = _find(testUsersOrg1_3, { email: smoketestorg1_user2.email })._id
   const adminToModifyId_3 = _find(testUsersOrg1_3, { email: smoketestorg1_admin2.email })._id
   const orgadminToModifyId_3 = _find(testUsersOrg1_3, { email: smoketestorg1_orgadmin2.email })._id
 
-  // PUT - USER (role up)
-  const putUserRoleDownRes = await api({
-    url: `${baseUrl}/${userToModifyId_3}`,
+  // PUT - ADMIN (role down)
+  const putAdminRoleDownRes = await api({
+    url: `${baseUrl}/${adminToModifyId_3}`,
+    method: 'put',
+    token,
+    body: { fName: 'billybob', role: 'user' },
+  })
+  expect({
+    res: putAdminRoleDownRes,
+    expectedStatus: token ? (hasRoleChangeAccess(role, { role: 'admin' }, 'user') ? 200 : 403) : 401,
+    description: `PUT ${baseUrl} - ${description} - update admin (role down)`,
+    errors,
+  })
+  // PUT - ORG ADMIN (role down)
+  const putOrgAdminRoleDownRes = await api({
+    url: `${baseUrl}/${orgadminToModifyId_3}`,
     method: 'put',
     token,
     body: { fName: 'billybob', role: 'admin' },
   })
   expect({
-    res: putUserRoleDownRes,
-    expectedStatus: token ? (hasRoleChangeAccess(role, { role: 'user' }, 'admin') ? 200 : 403) : 401,
-    description: `PUT ${baseUrl} - ${description} - update user (role up)`,
-    errors,
-  })
-  // PUT - ADMIN (role up)
-  const putAdminRoleDownRes = await api({
-    url: `${baseUrl}/${adminToModifyId_3}`,
-    method: 'put',
-    token,
-    body: { fName: 'billybob', role: 'orgadmin' },
-  })
-  expect({
-    res: putAdminRoleDownRes,
-    expectedStatus: token ? (hasRoleChangeAccess(role, { role: 'admin' }, 'orgadmin') ? 200 : 403) : 401,
-    description: `PUT ${baseUrl} - ${description} - update admin (role up)`,
-    errors,
-  })
-  // PUT - ORG ADMIN (role up)
-  const putOrgAdminRoleDownRes = await api({
-    url: `${baseUrl}/${orgadminToModifyId_3}`,
-    method: 'put',
-    token,
-    body: { fName: 'billybob', role: 'superadmin' },
-  })
-  expect({
     res: putOrgAdminRoleDownRes,
-    expectedStatus: token ? (hasRoleChangeAccess(role, { role: 'orgadmin' }, 'superadmin') ? 200 : 403) : 401,
-    description: `PUT ${baseUrl} - ${description} - update org admin (role up)`,
+    expectedStatus: token ? (hasRoleChangeAccess(role, { role: 'orgadmin' }, 'admin') ? 200 : 403) : 401,
+    description: `PUT ${baseUrl} - ${description} - update org admin (role down)`,
     errors,
   })
+
+  // FOR FUTURE USE - ADD TO CONFIG IF NEEDED
+  const showUserResponses = false
+  if (showUserResponses) {
+    console.log('getRes', getRes)
+    console.log('getIdRes', getIdRes)
+    console.log('getIdCrossOrgRes', getIdCrossOrgRes)
+    console.log('postUserRes', postUserRes)
+    console.log('postAdminRes', postAdminRes)
+    console.log('postOrgAdminRes', postOrgAdminRes)
+    console.log('postSuperAdminRes', postSuperAdminRes)
+    console.log('putUserRes', putUserRes)
+    console.log('putAdminRes', putAdminRes)
+    console.log('putOrgAdminRes', putOrgAdminRes)
+    console.log('putOrgAdminSelfRes', putOrgAdminSelfRes)
+    console.log('putSuperAdminRes', putSuperAdminRes)
+    console.log('deleteUserRes', deleteUserRes)
+    console.log('deleteAdminRes', deleteAdminRes)
+    console.log('deleteOrgAdminRes', deleteOrgAdminRes)
+    console.log('deleteSuperAdminRes', deleteSuperAdminRes)
+    console.log('putUserRoleUpRes', putUserRoleUpRes)
+    console.log('putAdminRoleUpRes', putAdminRoleUpRes)
+    console.log('putOrgAdminRoleUpRes', putOrgAdminRoleUpRes)
+    console.log('putAdminRoleDownRes', putAdminRoleDownRes)
+    console.log('putOrgAdminRoleDownRes', putOrgAdminRoleDownRes)
+  }
 
   printRoute({ errors, msg: baseUrl })
   return errors

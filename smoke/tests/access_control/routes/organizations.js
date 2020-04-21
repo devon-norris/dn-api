@@ -20,13 +20,23 @@ module.exports = async ({ user = {}, description, postBody = {}, putBody = {} })
   expect({ res: getIdRes, expectedStatus: 200, description: `GET ID ${baseUrl} - ${description}`, errors })
 
   const postRes = await api({ ...params, method: 'post', body: postBody })
-  expect({ res: postRes, expectedStatus, description: `POST ${baseUrl} - ${description}`, errors })
+  expect({
+    res: postRes,
+    expectedStatus: token ? (role === 'superadmin' ? 500 : 403) : 401,
+    description: `POST ${baseUrl} - ${description}`,
+    errors,
+  })
 
   const putRes = await api({ ...params, url: `${baseUrl}/${testOrg1Id}`, method: 'put', body: putBody })
   expect({ res: putRes, expectedStatus, description: `PUT ${baseUrl} - ${description}`, errors })
 
   const deleteRes = await api({ ...params, url: `${baseUrl}/${testOrg1Id}`, method: 'delete' })
-  expect({ res: deleteRes, expectedStatus, description: `DELETE ${baseUrl} - ${description}`, errors })
+  expect({
+    res: deleteRes,
+    expectedStatus: token ? 403 : 401,
+    description: `DELETE ${baseUrl} - ${description}`,
+    errors,
+  })
 
   printRoute({ errors, msg: baseUrl })
   return errors

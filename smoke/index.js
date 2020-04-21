@@ -10,7 +10,10 @@ const createTestOrgsErrors = [],
   userModelErrors = [],
   organizationModelErrors = [],
   noTokenErrors = [],
-  userTokenErrors = []
+  userTokenErrors = [],
+  adminTokenErrors = [],
+  orgAdminTokenErrors = [],
+  superAdminTokenErrors = []
 
 // Import test suites
 const createTestOrgs = require('./tests/createTestOrgs')
@@ -21,6 +24,9 @@ const userModel = require('./tests/models/user')
 const organizationModel = require('./tests/models/organization')
 const noToken = require('./tests/access_control/noToken')
 const userToken = require('./tests/access_control/user')
+const adminToken = require('./tests/access_control/admin')
+const orgAdminToken = require('./tests/access_control/orgAdmin')
+const superAdminToken = require('./tests/access_control/superAdmin')
 
 const smokeTests = async () => {
   // Model Tests
@@ -37,8 +43,11 @@ const smokeTests = async () => {
   console.log('    🔑 Access Control - User')
   const userTokenErrors = await userToken()
   console.log('    🔑 Access Control - Admin')
+  const adminTokenErrors = await adminToken()
   console.log('    🔑 Access Control - Org Admin')
+  const orgAdminTokenErrors = await orgAdminToken()
   console.log('    🔑 Access Control - Super Admin')
+  const superAdminTokenErrors = await superAdminToken()
 
   // Delete Orgs and Users
   const deleteTestOrgsErrors = await deleteTestOrgs()
@@ -53,7 +62,10 @@ const smokeTests = async () => {
       userModelErrors,
       organizationModelErrors,
       noTokenErrors,
-      userTokenErrors
+      userTokenErrors,
+      adminTokenErrors,
+      orgAdminTokenErrors,
+      superAdminTokenErrors
     )
   )
 }
