@@ -65,7 +65,7 @@ export const sendError = ({
   message = '',
   error = 'Server Error',
 }: ErrorResponseParams): Response => {
-  if (error.toString().includes(crossOrgError)) return accessDenied(res)
+  if (message.includes(crossOrgError)) return accessDenied(res)
   const responseBody: ErrorResponseBody = { status: statusType.ERROR, message, error }
   return res.status(status).send(responseBody)
 }

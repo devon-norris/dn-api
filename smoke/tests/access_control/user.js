@@ -1,7 +1,10 @@
-const printMsg = require('../../utils/printMsg')
 const generateTestUsers = require('../../utils/generateTestUsers')
 const deleteTestUsers = require('../../utils/deleteTestUsers')
+const generateToken = require('../../utils/generateToken')
+const printMsg = require('../../utils/printMsg')
 const mergeErrors = require('../../utils/mergeErrors')
+const { testUsers1: configTestUsers1 } = require('../../config/testUsers')
+const { smoketestorg1_user1 } = configTestUsers1
 
 // Import routes
 const healthRoute = require('./routes/health')
@@ -12,26 +15,24 @@ const permissionsRoute = require('./routes/permissions')
 const organizationsRoute = require('./routes/organizations')
 const usersRoute = require('./routes/users')
 
-const { testOrg1 } = require('../../config/testOrganizations')
-const { testUsers1: configTestUsers1 } = require('../../config/testUsers')
-const { smoketestorg1_user1 } = configTestUsers1
-const description = 'No token'
+const description = 'user token'
 
 module.exports = async () => {
-  // Cleanup previous users
   await deleteTestUsers()
-  await generateTestUsers({ orgEmail: testOrg1.email })
+  const testUser = await generateTestUsers({ email: smoketestorg1_user1.email })
+  const testUserToken = await generateToken(testUser.data)
+  const user = { token: testUserToken, role: 'user', id: testUser.data._id }
 
-  const healthErrors = await healthRoute({ description })
-  const longLivedTokenErrors = await longLivedTokenRoute({ description })
+  const healthErrors = await healthRoute({ description, user })
+  const longLivedTokenErrors = await longLivedTokenRoute({ description, user })
   const usersAuthenticateErrors = await usersAuthenticateRoute({
     description,
     user: { email: smoketestorg1_user1.email, password: smoketestorg1_user1.password },
   })
-  const usersLogoutErrors = await usersLogoutRoute({ description })
-  const permissionsErrors = await permissionsRoute({ description })
-  const organizationsRouteErrors = await organizationsRoute({ description })
-  const usersRouteErrors = await usersRoute({ description })
+  const usersLogoutErrors = await usersLogoutRoute({ description, user })
+  const permissionsErrors = await permissionsRoute({ description, user })
+  const organizationsRouteErrors = await organizationsRoute({ description, user })
+  const usersRouteErrors = await usersRoute({ description, user })
 
   const allErrors = mergeErrors(
     healthErrors,
@@ -42,6 +43,6 @@ module.exports = async () => {
     organizationsRouteErrors,
     usersRouteErrors
   )
-  printMsg({ errors: allErrors, msg: 'Access Control - no token' })
+  printMsg({ errors: allErrors, msg: 'Access Control - User' })
   return allErrors
 }

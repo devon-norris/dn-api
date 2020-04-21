@@ -66,3 +66,5 @@ RE-WRITE smoke tests
 
 Finish permissions service
 Write permissions tests
+
+FILTER ORGS BY ONLY NAME AND ID IF NOT SUPER ADMIN REQUEST ON GET

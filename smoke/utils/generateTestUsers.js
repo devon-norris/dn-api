@@ -22,8 +22,12 @@ const createTestUsers = async ({ currentUsers, currentOrgs, testUsers, findOne }
   testUsers.forEach(user => {
     const { email, orgEmail } = user
     const userOrg = _find(currentOrgs, { email: orgEmail })
-    const userExists = !!_find(currentUsers, { email })
-    if (!userExists) usersToCreate.push({ ...user, orgId: userOrg._id })
+    const userExists = _find(currentUsers, { email })
+    if (userExists) {
+      responses.push({ data: userExists, message: '', status: 201 })
+    } else {
+      usersToCreate.push({ ...user, orgId: userOrg._id })
+    }
   })
 
   for await (testUser of usersToCreate) {

@@ -75,8 +75,15 @@ export const modifyUsersValidator = async ({
   const dbUserId = dbUser._id.toString()
   const dbUserToModifyId = dbUserToModify._id.toString()
   const isModifyingOwnSelf = method === 'PUT' && dbUserId === dbUserToModifyId
+  // A user can modify themself
+  // A user cannot modify another user of the same access level or higher
   if (!isModifyingOwnSelf && userToModifyAccessLevel >= userAccessLevel) {
     return accessDeniedResponse()
+  }
+  // If changing a user's role, it cannot be higher than the requesting user's role
+  if (body.role) {
+    const newRoleAccessLevel = getAccessLevel(body)
+    if (newRoleAccessLevel > userAccessLevel) return accessDeniedResponse()
   }
 
   // Validate password

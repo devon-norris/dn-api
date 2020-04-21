@@ -24,6 +24,6 @@ module.exports = async ({ user = {}, description }) => {
   const deleteRes = await api({ ...params, url: `${baseUrl}/123`, method: 'delete' })
   expect({ res: deleteRes, expectedStatus: notFoundStatus, description: `DELETE ${baseUrl} - ${description}`, errors })
 
-  printRoute({ errors, msg: '/health' })
+  printRoute({ errors, msg: baseUrl })
   return errors
 }
