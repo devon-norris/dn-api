@@ -15,6 +15,7 @@ interface MethodOptions {
   bodyTransform?: Function
   bodyOmit?: string[]
   responseOmit?: string[]
+  responseOmitFunc?: Function
 }
 
 interface BuildControllerParams {
@@ -74,6 +75,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
 
   if (get !== undefined) {
     const responseOmit = _get(get, 'responseOmit', [])
+    const responseOmitFunc = _get(get, 'responseOmitFunc')
 
     router.get(
       '/',
@@ -87,7 +89,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           const service = getService(req, model)
           const { orgId } = req.query
           let data = orgId ? await service.find({ orgId }) : await service.find()
-          data = handleResponseOmit(data, responseOmit)
+          data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
           const error = err.toString()
@@ -110,7 +112,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           // Handle data
           const service = getService(req, model)
           let data = await service.findById(id)
-          data = handleResponseOmit(data, responseOmit)
+          data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
           const error = err.toString()
@@ -123,6 +125,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
 
   if (post !== undefined) {
     const responseOmit = _get(post, 'responseOmit', [])
+    const responseOmitFunc = _get(post, 'responseOmitFunc')
     const bodyOmit = _get(post, 'bodyOmit', [])
     const bodyTransform = _get(post, 'bodyTransform')
 
@@ -142,7 +145,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           // Handle data
           const service = getService(req, model)
           let data = await service.create(body)
-          data = handleResponseOmit(data, responseOmit)
+          data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data, status: 201 })
         } catch (err) {
           const error = err.toString()
@@ -155,6 +158,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
 
   if (put !== undefined) {
     const responseOmit = _get(put, 'responseOmit', [])
+    const responseOmitFunc = _get(put, 'responseOmitFunc')
     const bodyOmit = _get(put, 'bodyOmit', [])
     const bodyTransform = _get(put, 'bodyTransform')
 
@@ -177,7 +181,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           const service = getService(req, model)
           let data = await service.findByIdAndUpdate(id, body)
           if (_isNil(data)) return sendError({ res, message: 'Resource not found', status: 404 })
-          data = handleResponseOmit(data, responseOmit)
+          data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
           const error = err.toString()
@@ -190,6 +194,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
 
   if (del !== undefined) {
     const responseOmit = _get(del, 'responseOmit', [])
+    const responseOmitFunc = _get(del, 'responseOmitFunc')
 
     router.delete(
       '/:id',
@@ -205,7 +210,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           const service = getService(req, model)
           let data = await service.findByIdAndDelete(id)
           if (_isNil(data)) return sendError({ res, message: 'Resource not found', status: 404 })
-          data = handleResponseOmit(data, responseOmit)
+          data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
           const error = err.toString()

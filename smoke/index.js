@@ -50,8 +50,8 @@ const smokeTests = async () => {
   const superAdminTokenErrors = await superAdminToken()
 
   // Delete Orgs and Users
-  const deleteTestOrgsErrors = await deleteTestOrgs()
   const deleteTestUsersErrors = await deleteTestUsers()
+  const deleteTestOrgsErrors = await deleteTestOrgs()
 
   handleErrors(
     mergeErrors(

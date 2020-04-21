@@ -57,14 +57,6 @@ heroku logs --tail --remote [environment]
 
 TODO:
 
-RE-WRITE smoke tests
-
-- org model test
-- permission model test?
-- access control tests
-- Create cross org tests
-
 Finish permissions service
-Write permissions tests
-
-FILTER ORGS BY ONLY NAME AND ID IF NOT SUPER ADMIN REQUEST ON GET
+Write permissions tests - check smoke after finishing above
+Install jest and write some basic unit tests on logical functions
