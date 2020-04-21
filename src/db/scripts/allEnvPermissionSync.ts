@@ -84,7 +84,7 @@ const checkAllEnvPerms = async (): Promise<void> => {
     console.log('DEV equals PROD?', devEqualsProd)
     throw new Error('Permission sets not in sync')
   }
-  console.log('Permission sets are in sync!')
+  console.log('Permission sets in all environments are in sync!')
 }
 
 checkAllEnvPerms()

@@ -1,26 +1,58 @@
-// TODO: bring in actual actions from permission scripts
+import permissionDbService from '../db/scripts/permissionDbService'
+import dbConfig from '../db/config'
+import { Permission } from '../db/models/permissions'
+import db from '../db'
+const allEnvironments = Object.values(dbConfig.environments)
 
-interface Permission {
-  name: string
-  roles: string[]
+const create = async (permission: Permission): Promise<any> => {
+  try {
+    const envResponses: any[] = []
+    for await (const env of allEnvironments) {
+      const permissionAdded = await permissionDbService.add(env, permission)
+      envResponses.push({ env, permission: permissionAdded })
+    }
+
+    // Connect back to dev db
+    await db()
+    return envResponses
+  } catch (err) {
+    await db()
+    throw err
+  }
 }
 
-const create = async (permission: Permission): Promise<Permission> => {
-  console.log('Mock creating permission:', permission)
-  throw new Error('mock error')
-  return permission
-}
+const update = async (permission: Permission, id: string): Promise<any> => {
+  try {
+    const envResponses: any[] = []
+    for await (const env of allEnvironments) {
+      const permissionModified = await permissionDbService.modify(env, permission, id)
+      envResponses.push({ env, permission: permissionModified })
+    }
 
-const update = async (id: string, permission: Permission): Promise<Permission> => {
-  console.log('Mock updating permission:', id, permission)
-  throw new Error('mock error')
-  return permission
+    // Connect back to dev db
+    await db()
+    return envResponses
+  } catch (err) {
+    await db()
+    throw err
+  }
 }
 
 const deletePermission = async (id: string): Promise<any> => {
-  console.log('Mock deleting permission:', id)
-  throw new Error('mock error')
-  return {}
+  try {
+    const envResponses: any[] = []
+    for await (const env of allEnvironments) {
+      const permissionDeleted = await permissionDbService.deletePerm(env, id)
+      envResponses.push({ env, permission: permissionDeleted })
+    }
+
+    // Connect back to dev db
+    await db()
+    return envResponses
+  } catch (err) {
+    await db()
+    throw err
+  }
 }
 
 export default { create, update, deletePermission }

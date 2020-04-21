@@ -57,6 +57,7 @@ heroku logs --tail --remote [environment]
 
 TODO:
 
-Finish permissions service
-Write permissions tests - check smoke after finishing above
 Install jest and write some basic unit tests on logical functions
+Unify Responses - make error as an error object, and message as err.toString()
+Use logger where needed throughout app
+Test adding a new permission

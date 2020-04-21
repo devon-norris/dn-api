@@ -20,21 +20,21 @@ if (config.isDevelopment) {
     } catch (err) {
       return sendError({
         res,
-        message: 'Failed to create permission in one or more environments',
-        error: err.toString(),
+        message: `Failed to create permission in one or more environments - ${err.toString()}`,
+        error: err,
       })
     }
   })
 
   router.put('/:id', async (req: Request, res: Response) => {
     try {
-      const data = await permissionService.update(req.params.id, req.body)
+      const data = await permissionService.update(req.body, req.params.id)
       return sendSuccess({ res, message: 'Successfully updated permission in all environments!', data })
     } catch (err) {
       return sendError({
         res,
-        message: 'Failed to update permission in one or more environments',
-        error: err.toString(),
+        message: `Failed to update permission in one or more environments - ${err.toString()}`,
+        error: err,
       })
     }
   })
@@ -46,8 +46,8 @@ if (config.isDevelopment) {
     } catch (err) {
       return sendError({
         res,
-        message: 'Failed to delete permission in one or more environments',
-        error: err.toString(),
+        message: `Failed to delete permission in one or more environments - ${err.toString()}`,
+        error: err,
       })
     }
   })

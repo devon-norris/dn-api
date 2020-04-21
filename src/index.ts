@@ -4,13 +4,13 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import controllers from './controllers'
 import config from './config'
-import mongoose from 'mongoose'
+import db from './db'
 import { permissions, validateJWT, notFound, handleError } from './middleware'
 const server = express()
-const { db, loggingFormat, cookie, origin, port } = config
+const { loggingFormat, cookie, origin, port } = config
 
 // Connect to DB
-mongoose.connect(db.url, db.config)
+db()
 
 // Initialize Server
 server.use(morgan(loggingFormat))
