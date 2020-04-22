@@ -33,9 +33,9 @@ git remote rename heroku production
 
 [development](http://localhost:5000/health)
 
-[staging](http://localhost:5000/health)
+[staging](https://vast-fortress-23068.herokuapp.com/health)
 
-[production](http://localhost:5000/health)
+[production](https://pacific-atoll-87761.herokuapp.com/health)
 
 # Heroku Commands
 
@@ -59,7 +59,6 @@ heroku logs --tail --remote [environment]
 
 TODO:
 
-Install jest and write some basic unit tests on logical functions
+Write more unit tests
 Unify Responses - make error as an error object, and message as err.toString()
 Use logger where needed throughout app
-Test adding a new permission
