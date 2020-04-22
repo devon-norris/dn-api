@@ -58,14 +58,13 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --max-warnings 0 --ignore-pattern '!.eslintrc.js'",
-      "npm run test",
+      "eslint --max-warnings 1 --ignore-pattern '!.eslintrc.js'",
       "prettier --write"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run permissions:validate && lint-staged"
+      "pre-commit": "npm run permissions:validate && npm run test &&  lint-staged"
     }
   },
   "engines": {
