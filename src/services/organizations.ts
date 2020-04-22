@@ -14,7 +14,7 @@ export const deleteOrganizationValidator = async ({ id }: ValidatorParams): Prom
   return { isValid, message, status }
 }
 
-export const organizationResponseOmit = (data: any[], req: Request): any[] => {
+export const organizationResponseOmit = (data: any, req: Request): any => {
   const { user } = req
   const isSuperAdmin = user?.role === RoleNames.superAdmin
   if (isSuperAdmin) return data

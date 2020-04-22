@@ -8,6 +8,7 @@
     "start": "NODE_ENV=production node build",
     "build": "tsc",
     "smoke": "node smoke",
+    "test": "jest --config",
     "permissions:validate": "ts-node src/db/scripts/allEnvPermissionSync.ts && ts-node src/db/scripts/codeDbPermissonSync.ts",
     "permissions:add": "ts-node src/db/scripts/addPermissions.ts",
     "deploy:staging": "git checkout master && git pull && node smoke && git push staging master",
@@ -23,6 +24,7 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.3",
+    "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.8",
     "@types/lodash": "^4.14.149",
     "@types/mongoose": "^5.7.6",
@@ -35,9 +37,11 @@
     "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "husky": "^4.2.3",
+    "jest": "^25.4.0",
     "lint-staged": "^10.0.8",
     "nodemon": "^2.0.2",
     "prettier": "^2.0.1",
+    "ts-jest": "^25.4.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3",
     "yargs": "^15.3.1"
@@ -55,6 +59,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --max-warnings 0 --ignore-pattern '!.eslintrc.js'",
+      "npm run test",
       "prettier --write"
     ]
   },
