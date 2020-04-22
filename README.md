@@ -15,16 +15,18 @@ heroku login
 
 # Dynos
 
-Staging Dyno
+## Staging Dyno
 
 ```
-vast-fortress-23068
+heroku git:remote -a vast-fortress-23068
+git remote rename heroku staging
 ```
 
 Production Dyno
 
 ```
-pacific-atoll-87761
+heroku git:remote -a pacific-atoll-87761
+git remote rename heroku production
 ```
 
 # Environments
