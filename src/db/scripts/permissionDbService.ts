@@ -24,49 +24,49 @@ const validatePermission = (permission: Permission): boolean => {
   return permNameIsValid && permRolesAreValid
 }
 
-const add = async (env: string, permission: Permission): Promise<any> => {
+const add = async (env: string, name: string, permission: Permission): Promise<any> => {
   try {
     await db(env)
     const permissionToAdd = addSuperAdminToPerm(permission)
     if (!validatePermission(permissionToAdd)) throw new Error('Invalid permissions given')
-    const existingPermission = await Permissions.findOne({ name: permission.name })
+    const existingPermission = await Permissions.findOne({ name })
     if (existingPermission) throw new Error('Permission already exists')
-    const permissionAdded = await new Permissions(permission).save()
+    const permissionAdded = await new Permissions(permissionToAdd).save()
     mongoose.connection.close()
     return permissionAdded
   } catch (err) {
     mongoose.connection.close()
-    throw new Error(`Error adding permission - ENV: ${env} - ERR: ${err.toString()}`)
+    throw new Error(`Error adding permission in ${env} -> ${err.message};`)
   }
 }
 
-const modify = async (env: string, permission: Permission, id: string): Promise<any> => {
+const modify = async (env: string, name: string, permission: Permission): Promise<any> => {
   try {
     await db(env)
     const permissionToModify = addSuperAdminToPerm(permission)
     if (!validatePermission(permissionToModify)) throw new Error('Invalid permissions given')
-    const existingPermission = await Permissions.findById(id)
+    const existingPermission = await Permissions.findOne({ name })
     if (!existingPermission) throw new Error('Permission does not exist')
-    const permissionModified = await Permissions.findByIdAndUpdate(id, permission)
+    const permissionModified = await Permissions.findByIdAndUpdate(existingPermission._id, permissionToModify)
     mongoose.connection.close()
     return permissionModified
   } catch (err) {
     mongoose.connection.close()
-    throw new Error(`Error modifying permission - ENV: ${env} - ERR: ${err.toString()}`)
+    throw new Error(`Error modifying permission in ${env} -> ${err.message};`)
   }
 }
 
-const deletePerm = async (env: string, id: string): Promise<any> => {
+const deletePerm = async (env: string, name: string): Promise<any> => {
   try {
     await db(env)
-    const existingPermission = await Permissions.findById(id)
+    const existingPermission = await Permissions.findOne({ name })
     if (!existingPermission) throw new Error('Permission does not exist')
-    const deletedPermission = await Permissions.findByIdAndDelete(id)
+    const deletedPermission = await Permissions.findByIdAndDelete(existingPermission._id)
     mongoose.connection.close()
     return deletedPermission
   } catch (err) {
     mongoose.connection.close()
-    throw new Error(`Error deleting permission - ENV: ${env} - ERR: ${err.toString()}`)
+    throw new Error(`Error deleting permission in ${env} -> ${err.message};`)
   }
 }
 

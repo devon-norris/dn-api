@@ -29,7 +29,8 @@ const validatePermissions = async (): Promise<void> => {
 
   const codePermsEqualDbPerms = isEqualPerms(codePermissions, dbPermissionNames)
 
-  if (!codePermsEqualDbPerms || !superAdminInEveryDbPerm) throw new Error('Permissions not in sync')
+  if (!codePermsEqualDbPerms) throw new Error('Code permissions do not equal db permissions')
+  if (!superAdminInEveryDbPerm) throw new Error('Super Admin not in every permission')
   console.log('Successfully validated DB permissions, CODE permissions and SUPER ADMIN permissions')
   mongoose.connection.close()
 }

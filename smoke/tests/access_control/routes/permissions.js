@@ -23,10 +23,10 @@ module.exports = async ({ user = {}, description }) => {
   const postRes = await api({ url: baseUrl, method: 'post', token })
   expect({ res: postRes, expectedStatus, description: `POST ${baseUrl} - ${description}`, errors })
 
-  const putRes = await api({ url: `${baseUrl}/123`, method: 'put', token })
+  const putRes = await api({ url: baseUrl, method: 'put', token })
   expect({ res: putRes, expectedStatus, description: `PUT ${baseUrl} - ${description}`, errors })
 
-  const deleteRes = await api({ url: `${baseUrl}/123`, method: 'delete', token })
+  const deleteRes = await api({ url: baseUrl, method: 'delete', token })
   expect({ res: deleteRes, expectedStatus, description: `DELETE ${baseUrl} - ${description}`, errors })
 
   printRoute({ errors, msg: baseUrl })

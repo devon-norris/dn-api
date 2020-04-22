@@ -10,9 +10,9 @@ interface GetAccessTokenParams {
 }
 
 export const extractAccessTokenFromRequest = ({ signedCookies, headers }: Request): string => {
-  const cookieAccessToken = _get(signedCookies, ACCESS_TOKEN)
+  const cookieAccessToken = _get(signedCookies, ACCESS_TOKEN, '')
   const authHeaderToken = _get(headers, 'authorization', '').replace('Bearer ', '')
-  return cookieAccessToken || authHeaderToken
+  return authHeaderToken || cookieAccessToken
 }
 
 export const getAccessTokenExpiration = ({ token = '', req }: GetAccessTokenParams): number => {
