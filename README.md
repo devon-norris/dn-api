@@ -31,11 +31,11 @@ git remote rename heroku production
 
 # Environments
 
-development (only locally)
+[development](http://localhost:5000/health)
 
-staging
+[staging](http://localhost:5000/health)
 
-production
+[production](http://localhost:5000/health)
 
 # Heroku Commands
 
