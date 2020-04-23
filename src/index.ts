@@ -28,7 +28,7 @@ server.use(permissions)
 // Handle routes
 server.use('/', controllers)
 
-// Handle route not found and global errors
+// Handle not found route and global errors
 server.use(notFound)
 server.use(handleError)
 

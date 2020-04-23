@@ -64,7 +64,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run permissions:validate && npm run test && lint-staged"
+      "pre-commit": "npm run permissions:validate && lint-staged && npm run test"
     }
   },
   "engines": {
