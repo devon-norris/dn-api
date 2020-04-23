@@ -3,6 +3,8 @@ import dbConfig from '../db/config'
 import { Permission } from '../db/models/permissions'
 import db from '../db'
 import _isEmpty from 'lodash/isEmpty'
+import logger from '../util/logger'
+const childLogger = logger.child({ service: 'permissions' })
 const allEnvironments = Object.values(dbConfig.environments)
 
 const handlePermissionAction = async (action: any, name: string, permission?: Permission): Promise<any> => {
@@ -17,17 +19,26 @@ const handlePermissionAction = async (action: any, name: string, permission?: Pe
     }
   }
   await db()
-  if (!_isEmpty(errors)) throw new Error(errors.toString())
+  if (!_isEmpty(errors)) {
+    childLogger.error(`Error changing permissions`, { permission, errors })
+    throw new Error(errors.toString())
+  }
   return responses
 }
 
-const create = async (permission: Permission): Promise<any> =>
-  handlePermissionAction(permissionDbService.add, permission.name, permission)
+const create = async (permission: Permission): Promise<any> => {
+  childLogger.info(`Creating new permission: ${permission.name}`)
+  return handlePermissionAction(permissionDbService.add, permission.name, permission)
+}
 
-const update = async (permission: Permission): Promise<any> =>
-  handlePermissionAction(permissionDbService.modify, permission.name, permission)
+const update = async (permission: Permission): Promise<any> => {
+  childLogger.info(`Updating permission: ${permission.name}`)
+  return handlePermissionAction(permissionDbService.modify, permission.name, permission)
+}
 
-const deletePermission = async (name: string): Promise<any> =>
-  handlePermissionAction(permissionDbService.deletePerm, name)
+const deletePermission = async (name: string): Promise<any> => {
+  childLogger.info(`Deleting permission: ${name}`)
+  return handlePermissionAction(permissionDbService.deletePerm, name)
+}
 
 export default { create, update, deletePermission }

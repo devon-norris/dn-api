@@ -8,6 +8,8 @@ import generateAccessTokenPayload, { defaultAccessToken } from '../util/token/ge
 import generateRefreshTokenPayload from '../util/token/generateRefreshTokenPayload'
 import generateToken from '../util/token/generateToken'
 import { Request } from '../types'
+import logger from '../util/logger'
+const childLogger = logger.child({ service: 'users' })
 
 interface AuthenticateUserParams {
   email: string
@@ -95,18 +97,34 @@ export const authenticateUser = async ({
   email,
   password,
 }: AuthenticateUserParams): Promise<AuthenticateUserResponse> => {
-  const { isValid, userId } = await authenticatePassword({ email, password })
-  if (!isValid) throw new Error('Authentication failed')
-  const refreshTokenPayload = await generateRefreshTokenPayload(userId)
-  const accessTokenPayload = await generateAccessTokenPayload(userId)
-  const refreshToken = generateToken({ tokenPayload: refreshTokenPayload, expirationDays: 30 })
-  const accessToken = generateToken({ tokenPayload: accessTokenPayload })
-  return { refreshToken, accessToken, data: accessTokenPayload }
+  try {
+    const { isValid, userId } = await authenticatePassword({ email, password })
+    if (!isValid) throw new Error('Authentication failed')
+    const refreshTokenPayload = await generateRefreshTokenPayload(userId)
+    const accessTokenPayload = await generateAccessTokenPayload(userId)
+    const refreshToken = generateToken({ tokenPayload: refreshTokenPayload, expirationDays: 30 })
+    const accessToken = generateToken({ tokenPayload: accessTokenPayload })
+    return { refreshToken, accessToken, data: accessTokenPayload }
+  } catch (err) {
+    childLogger.error(`Error authenticating user: ${email}`, {
+      email,
+      passwordPresent: !!password,
+      error: err.toString(),
+    })
+    throw err
+  }
 }
 
-export const generateLongLivedToken = async ({ user }: Request): Promise<LongLivedToken> => ({
-  token: generateToken({
-    tokenPayload: user || defaultAccessToken,
-    expirationDays: 365,
-  }),
-})
+export const generateLongLivedToken = async ({ user }: Request): Promise<LongLivedToken> => {
+  try {
+    return {
+      token: generateToken({
+        tokenPayload: user || defaultAccessToken,
+        expirationDays: 365,
+      }),
+    }
+  } catch (err) {
+    childLogger.error('Error generating long lived token', { user, error: err.toString() })
+    throw err
+  }
+}

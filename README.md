@@ -56,9 +56,3 @@ Tail logs
 ```
 heroku logs --tail --remote [environment]
 ```
-
-TODO:
-
-Write more unit tests
-Unify Responses - make error as an error object, and message as err.toString()
-Use logger where needed throughout app

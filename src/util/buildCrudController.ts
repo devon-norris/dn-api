@@ -80,6 +80,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
     router.get(
       '/',
       async (req: Request, res: Response): Promise<Response> => {
+        const { orgId } = req.query
         try {
           // Validate
           const { isValid, message, status } = await validator(get, req)
@@ -87,13 +88,12 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
 
           // Handle data
           const service = getService(req, model)
-          const { orgId } = req.query
           let data = orgId ? await service.find({ orgId }) : await service.find()
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
           const errString = err.toString()
-          childLogger.error('Error fetching list', { service: model, error: errString })
+          childLogger.error(`Error with GET /${model}`, { orgId, error: errString })
           return sendError({ res, message: errString, error: err })
         }
       }
@@ -116,7 +116,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           return sendSuccess({ res, data })
         } catch (err) {
           const errString = err.toString()
-          childLogger.error('Error fetching item', { service: model, id, error: errString })
+          childLogger.error(`Error with GET /${model}/${id}`, { error: errString })
           return sendError({ res, message: errString, error: err })
         }
       }
@@ -149,7 +149,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           return sendSuccess({ res, data, status: 201 })
         } catch (err) {
           const errString = err.toString()
-          childLogger.error('Error creating item', { service: model, body, error: errString })
+          childLogger.error(`Error with POST /${model}`, { body, error: errString })
           return sendError({ res, message: errString, error: err })
         }
       }
@@ -185,7 +185,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           return sendSuccess({ res, data })
         } catch (err) {
           const errString = err.toString()
-          childLogger.error('Error updating item', { service: model, body, id, error: errString })
+          childLogger.error(`Error with PUT /${model}/${id}`, { body, error: errString })
           return sendError({ res, message: errString, error: err })
         }
       }
@@ -214,7 +214,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           return sendSuccess({ res, data })
         } catch (err) {
           const errString = err.toString()
-          childLogger.error('Error deleting item', { service: model, id, error: errString })
+          childLogger.error(`Error with DELETE /${model}/${id}`, { error: errString })
           return sendError({ res, message: errString, error: err })
         }
       }
