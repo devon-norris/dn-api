@@ -1,12 +1,12 @@
 import express from 'express'
-import buildTableController from '../util/buildTableController'
+import buildCrudController from '../util/buildCrudController'
 import { Router, Request, Response } from '../types'
 import config from '../config'
 import permissionService from '../services/permissions'
 import { sendSuccess, sendError } from '../util/responses'
 const router: Router = express.Router()
 
-buildTableController({
+buildCrudController({
   router,
   model: 'permissions',
   get: true,

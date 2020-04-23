@@ -5,5 +5,5 @@ import { sendError } from '../util/responses'
 export default (err: any, req: Request, res: Response, next: NextFunction): Response =>
   sendError({
     res,
-    error: err.toString(),
+    error: err,
   })

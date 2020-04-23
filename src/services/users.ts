@@ -1,7 +1,7 @@
 import roles from '../db/roles'
 import Users from '../db/models/users'
 import _isEmpty from 'lodash/isEmpty'
-import { ValidatorResponse, ValidatorParams } from '../util/buildTableController'
+import { ValidatorResponse, ValidatorParams } from '../util/buildCrudController'
 import validatePassword from '../util/password/validatePassword'
 import authenticatePassword from '../util/password/authenticatePassword'
 import generateAccessTokenPayload, { defaultAccessToken } from '../util/token/generateAccessTokenPayload'

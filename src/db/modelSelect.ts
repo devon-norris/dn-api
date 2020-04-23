@@ -1,6 +1,8 @@
+// Import models
 import Users from './models/users'
 import Organizations from './models/organizations'
 import Permissions from './models/permissions'
+// Other imports
 import _get from 'lodash/get'
 
 export const crossOrgError = 'Cross organization request not allowed'

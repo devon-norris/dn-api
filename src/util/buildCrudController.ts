@@ -92,9 +92,9 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
-          const error = err.toString()
-          childLogger.error('Error fetching list', { service: model, error })
-          return sendError({ res, message: error })
+          const errString = err.toString()
+          childLogger.error('Error fetching list', { service: model, error: errString })
+          return sendError({ res, message: errString, error: err })
         }
       }
     )
@@ -115,9 +115,9 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
-          const error = err.toString()
-          childLogger.error('Error fetching item', { service: model, id, error })
-          return sendError({ res, message: error })
+          const errString = err.toString()
+          childLogger.error('Error fetching item', { service: model, id, error: errString })
+          return sendError({ res, message: errString, error: err })
         }
       }
     )
@@ -148,9 +148,9 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data, status: 201 })
         } catch (err) {
-          const error = err.toString()
-          childLogger.error('Error creating item', { service: model, body, error })
-          return sendError({ res, message: error })
+          const errString = err.toString()
+          childLogger.error('Error creating item', { service: model, body, error: errString })
+          return sendError({ res, message: errString, error: err })
         }
       }
     )
@@ -184,9 +184,9 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
-          const error = err.toString()
-          childLogger.error('Error updating item', { service: model, body, id, error })
-          return sendError({ res, message: error })
+          const errString = err.toString()
+          childLogger.error('Error updating item', { service: model, body, id, error: errString })
+          return sendError({ res, message: errString, error: err })
         }
       }
     )
@@ -213,9 +213,9 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
           return sendSuccess({ res, data })
         } catch (err) {
-          const error = err.toString()
-          childLogger.error('Error deleting item', { service: model, id, error })
-          return sendError({ res, message: error })
+          const errString = err.toString()
+          childLogger.error('Error deleting item', { service: model, id, error: errString })
+          return sendError({ res, message: errString, error: err })
         }
       }
     )

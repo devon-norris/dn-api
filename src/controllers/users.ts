@@ -1,5 +1,5 @@
 import express from 'express'
-import buildTableController from '../util/buildTableController'
+import buildCrudController from '../util/buildCrudController'
 import { createUsersValidator, modifyUsersValidator, authenticateUser, generateLongLivedToken } from '../services/users'
 import { sendError, sendSuccess } from '../util/responses'
 import cookieConfig, { REFRESH_TOKEN, ACCESS_TOKEN } from '../util/cookieConfig'
@@ -10,7 +10,7 @@ const router: Router = express.Router()
 const userBodyOmit = ['googleSignup']
 const userResponseOmit = ['password', '__v']
 
-buildTableController({
+buildCrudController({
   router,
   model: 'users',
   get: {
@@ -46,7 +46,7 @@ router.post(
       res.cookie(REFRESH_TOKEN, refreshToken, cookieConfig)
       return sendSuccess({ res, data })
     } catch (err) {
-      return sendError({ res, status: 401, error: err.toString() })
+      return sendError({ res, status: 401, error: err })
     }
   }
 )
@@ -69,7 +69,7 @@ router.post(
       const data = await generateLongLivedToken(req)
       return sendSuccess({ res, data })
     } catch (err) {
-      return sendError({ res, error: err.toString() })
+      return sendError({ res, error: err })
     }
   }
 )

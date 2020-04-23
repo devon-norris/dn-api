@@ -2,7 +2,7 @@ import Users from '../db/models/users'
 import _isEmpty from 'lodash/isEmpty'
 import _pick from 'lodash/pick'
 import _isArray from 'lodash/isArray'
-import { ValidatorResponse, ValidatorParams } from '../util/buildTableController'
+import { ValidatorResponse, ValidatorParams } from '../util/buildCrudController'
 import { Request } from '../types'
 import { RoleNames } from '../db/roles'
 
