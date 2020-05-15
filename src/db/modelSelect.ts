@@ -58,11 +58,11 @@ const handleService = ({ service, reqOrgId, hasCrossOrgPermission }: HandleServi
     if (!reqOrgId || hasCrossOrgPermission) return service.findById(id)
     return handleFindById({ service, reqOrgId, id })
   },
-  findByIdAndUpdate: async (id: string): Promise<any> => {
-    if (hasCrossOrgPermission) return service.findByIdAndUpdate(id)
+  findByIdAndUpdate: async (id: string, data: any): Promise<any> => {
+    if (hasCrossOrgPermission) return service.findByIdAndUpdate(id, data)
     if (!reqOrgId) throw new Error(crossOrgError)
     await handleFindById({ service, reqOrgId, id })
-    return service.findByIdAndUpdate(id)
+    return service.findByIdAndUpdate(id, data)
   },
   findByIdAndDelete: async (id: string): Promise<any> => {
     if (hasCrossOrgPermission) return service.findByIdAndDelete(id)
