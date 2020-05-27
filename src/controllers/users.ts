@@ -5,6 +5,7 @@ import { sendError, sendSuccess } from '../util/responses'
 import cookieConfig, { REFRESH_TOKEN, ACCESS_TOKEN } from '../util/cookieConfig'
 import encryptPassword from '../util/password/encryptPassword'
 import { Request, Response, Router } from '../types'
+import authenticatePassword from '../util/password/authenticatePassword'
 const router: Router = express.Router()
 
 const userBodyOmit = ['googleSignup']
@@ -29,7 +30,13 @@ buildCrudController({
     validate: modifyUsersValidator,
     bodyOmit: userBodyOmit,
     responseOmit: userResponseOmit,
-    bodyTransform: (body: any): any => (body.password ? { ...body, password: encryptPassword(body.password) } : body),
+    bodyTransform: async (body: any): Promise<any> => {
+      if (body.password) {
+        const encryptedPassword = await encryptPassword(body.password)
+        return { ...body, password: encryptedPassword }
+      }
+      return body
+    },
   },
   del: {
     validate: modifyUsersValidator,
@@ -47,6 +54,19 @@ router.post(
       return sendSuccess({ res, data })
     } catch (err) {
       return sendError({ res, status: 401, error: err })
+    }
+  }
+)
+
+router.post(
+  '/authenticate/:id',
+  async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { isValid } = await authenticatePassword({ id: req.params.id, password: req.body.password })
+      if (!isValid) throw new Error('Invalid Password')
+      return sendSuccess({ res, data: { id: req.params.id } })
+    } catch (err) {
+      return sendError({ res, status: 401, error: err, message: 'Unauthorized' })
     }
   }
 )

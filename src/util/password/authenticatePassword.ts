@@ -3,7 +3,8 @@ import Users from '../../db/models/users'
 import _get from 'lodash/get'
 
 interface AuthenticatePasswordParams {
-  email: string
+  email?: string
+  id?: string
   password: string
 }
 
@@ -12,9 +13,9 @@ interface AuthenticatePasswordResponse {
   userId: string
 }
 
-export default async ({ email, password }: AuthenticatePasswordParams): Promise<AuthenticatePasswordResponse> => {
+export default async ({ email, password, id }: AuthenticatePasswordParams): Promise<AuthenticatePasswordResponse> => {
   try {
-    const dbUser = await Users.findOne({ email })
+    const dbUser = id ? await Users.findById(id) : await Users.findOne({ email })
     if (!dbUser) return { isValid: false, userId: '' }
 
     const isValid = await bcrypt.compare(password, _get(dbUser, 'password'))
