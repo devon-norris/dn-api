@@ -2,6 +2,7 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import helmet from 'helmet'
 import controllers from './controllers'
 import config from './config'
 import db from './db'
@@ -13,6 +14,7 @@ const { loggingFormat, cookie, origin, port } = config
 db()
 
 // Initialize Server
+server.use(helmet())
 server.use(morgan(loggingFormat))
 server.use(express.urlencoded({ extended: false }))
 server.use(express.json())
