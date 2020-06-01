@@ -9,7 +9,7 @@ if (isDevelopment) {
   require('dotenv').config()
 }
 
-const { PORT = '', TOKEN_SECRET = '', COOKIE_SECRET = '', DB_URL = '' } = process.env
+const { PORT = '', TOKEN_SECRET = '', COOKIE_SECRET = '', DB_URL = '', ADMIN_ID = '' } = process.env
 
 const checkUndefined = [TOKEN_SECRET, COOKIE_SECRET, DB_URL]
 if (checkUndefined.some(v => v === '')) throw new Error('Invalid environment variable')
@@ -34,6 +34,7 @@ interface Config {
   }
   loggingFormat: string
   isDevelopment: boolean
+  adminId: string
 }
 
 let config: Config = {
@@ -51,6 +52,7 @@ let config: Config = {
   },
   loggingFormat: 'dev',
   isDevelopment,
+  adminId: ADMIN_ID,
 }
 
 if (SERVER_ENV === environments.staging) {

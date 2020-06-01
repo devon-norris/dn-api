@@ -277,19 +277,19 @@ module.exports = async ({ user = {}, description }) => {
     description: `PUT ${baseUrl} - ${description} - update admin (role up)`,
     errors,
   })
-  // PUT - ORG ADMIN (role up)
-  const putOrgAdminRoleUpRes = await api({
-    url: `${baseUrl}/${orgadminToModifyId_2}`,
-    method: 'put',
-    token,
-    body: { fName: 'billybob', role: 'superadmin' },
-  })
-  expect({
-    res: putOrgAdminRoleUpRes,
-    expectedStatus: token ? (hasRoleChangeAccess(role, { role: 'orgadmin' }, 'superadmin') ? 200 : 403) : 401,
-    description: `PUT ${baseUrl} - ${description} - update org admin (role up)`,
-    errors,
-  })
+  // // PUT - ORG ADMIN (role up)
+  // const putOrgAdminRoleUpRes = await api({
+  //   url: `${baseUrl}/${orgadminToModifyId_2}`,
+  //   method: 'put',
+  //   token,
+  //   body: { fName: 'billybob', role: 'superadmin' },
+  // })
+  // expect({
+  //   res: putOrgAdminRoleUpRes,
+  //   expectedStatus: token ? (hasRoleChangeAccess(role, { role: 'orgadmin' }, 'superadmin') ? 200 : 403) : 401,
+  //   description: `PUT ${baseUrl} - ${description} - update org admin (role up)`,
+  //   errors,
+  // })
 
   // ROLE CHANGE DOWN TEST
   // Create User Samples Again

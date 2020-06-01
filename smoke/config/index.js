@@ -25,9 +25,9 @@ module.exports = {
     },
     two: {
       email: 'testsuperadmin2@test.com',
-      id: '5e72a0d14447f34de512c1ef',
+      id: '5ed50caec610c20b31b68882',
       orgId: '5e6c1d2f0cc7f63c95a08be6',
-      password: 'devotoT@17',
+      password: 'TestUser12!',
     },
   },
   secret: 'secret',

@@ -9,6 +9,7 @@ import generateRefreshTokenPayload from '../util/token/generateRefreshTokenPaylo
 import generateToken from '../util/token/generateToken'
 import { Request } from '../types'
 import logger from '../util/logger'
+import config from '../config'
 const childLogger = logger.child({ service: 'users' })
 
 interface AuthenticateUserParams {
@@ -76,6 +77,10 @@ export const modifyUsersValidator = async ({
   if (userAccessLevel === -1 || userToModifyAccessLevel === -1) return invalidFieldResponse('Invalid Role')
   const dbUserId = dbUser._id.toString()
   const dbUserToModifyId = dbUserToModify._id.toString()
+  // Handle system admin
+  if (method === 'DELETE' && dbUserToModifyId === config.adminId) return accessDeniedResponse()
+  if (dbUserId === config.adminId) return successResponse()
+  // Handle modifying self
   const isModifyingOwnSelf = method === 'PUT' && dbUserId === dbUserToModifyId
   // A user can modify themself
   // A user cannot modify another user of the same access level or higher
