@@ -51,7 +51,7 @@ router.post(
       const { refreshToken, accessToken, data } = await authenticateUser(req.body)
       res.cookie(ACCESS_TOKEN, accessToken, cookieConfig)
       res.cookie(REFRESH_TOKEN, refreshToken, cookieConfig)
-      return sendSuccess({ res, data })
+      return sendSuccess({ req, res, data })
     } catch (err) {
       return sendError({ res, status: 401, error: err })
     }
@@ -64,21 +64,21 @@ router.post(
     try {
       const { isValid } = await authenticatePassword({ id: req.params.id, password: req.body.password })
       if (!isValid) throw new Error('Invalid Password')
-      return sendSuccess({ res, data: { id: req.params.id } })
+      return sendSuccess({ req, res, data: { id: req.params.id } })
     } catch (err) {
       return sendError({ res, status: 401, error: err, message: 'Unauthorized' })
     }
   }
 )
 
-router.get('/authenticate', (req: Request, res: Response): Response => sendSuccess({ res, data: req.user }))
+router.get('/authenticate', (req: Request, res: Response): Response => sendSuccess({ req, res, data: req.user }))
 
 router.post(
   '/logout',
   (req: Request, res: Response): Response => {
     res.clearCookie(ACCESS_TOKEN, cookieConfig)
     res.clearCookie(REFRESH_TOKEN, cookieConfig)
-    return sendSuccess({ res, status: 204, data: {} })
+    return sendSuccess({ req, res, status: 204, data: {} })
   }
 )
 
@@ -87,7 +87,7 @@ router.post(
   async (req: Request, res: Response): Promise<Response> => {
     try {
       const data = await generateLongLivedToken(req)
-      return sendSuccess({ res, data })
+      return sendSuccess({ req, res, data })
     } catch (err) {
       return sendError({ res, error: err })
     }

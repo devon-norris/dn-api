@@ -1,7 +1,9 @@
-import { Response } from '../types'
+import { Request, Response } from '../types'
 import { crossOrgError } from '../db/modelSelect'
+import auditService from '../middleware/audit'
 
 interface SuccessResponseParams {
+  req: Request
   res: Response
   status?: number
   message?: string
@@ -54,7 +56,8 @@ export const notFound = (res: Response): Response => {
 
 // -------------- GENERIC --------------
 
-export const sendSuccess = ({ res, status = 200, message = '', data = {} }: SuccessResponseParams): Response => {
+export const sendSuccess = ({ req, res, status = 200, message = '', data = {} }: SuccessResponseParams): Response => {
+  auditService({ req, message, data })
   const responseBody: SuccessResponseBody = { status: statusType.SUCCESS, message, data }
   return res.status(status).send(responseBody)
 }

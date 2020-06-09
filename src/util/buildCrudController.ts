@@ -90,7 +90,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           const service = getService(req, model)
           let data = orgId ? await service.find({ orgId }) : await service.find()
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
-          return sendSuccess({ res, data })
+          return sendSuccess({ req, res, data })
         } catch (err) {
           const errString = err.toString()
           childLogger.error(`Error with GET /${model}`, { orgId, error: errString })
@@ -113,7 +113,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           const service = getService(req, model)
           let data = await service.findById(id)
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
-          return sendSuccess({ res, data })
+          return sendSuccess({ req, res, data })
         } catch (err) {
           const errString = err.toString()
           childLogger.error(`Error with GET /${model}/${id}`, { error: errString })
@@ -146,7 +146,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           const service = getService(req, model)
           let data = await service.create(body)
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
-          return sendSuccess({ res, data, status: 201 })
+          return sendSuccess({ req, res, data, status: 201 })
         } catch (err) {
           const errString = err.toString()
           childLogger.error(`Error with POST /${model}`, { body, error: errString })
@@ -182,7 +182,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           let data = await service.findByIdAndUpdate(id, body)
           if (_isNil(data)) return sendError({ res, message: 'Resource not found', status: 404 })
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
-          return sendSuccess({ res, data })
+          return sendSuccess({ req, res, data })
         } catch (err) {
           const errString = err.toString()
           childLogger.error(`Error with PUT /${model}/${id}`, { body, error: errString })
@@ -211,7 +211,7 @@ export default ({ router, model, get, post, put, del }: BuildControllerParams): 
           let data = await service.findByIdAndDelete(id)
           if (_isNil(data)) return sendError({ res, message: 'Resource not found', status: 404 })
           data = responseOmitFunc ? responseOmitFunc(data, req) : handleResponseOmit(data, responseOmit)
-          return sendSuccess({ res, data })
+          return sendSuccess({ req, res, data })
         } catch (err) {
           const errString = err.toString()
           childLogger.error(`Error with DELETE /${model}/${id}`, { error: errString })

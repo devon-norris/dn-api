@@ -8,17 +8,20 @@ export interface Permission {
 
 export default mongoose.model(
   'Permissions',
-  new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
+  new mongoose.Schema(
+    {
+      name: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true,
+      },
+      roles: {
+        type: Array,
+        required: true,
+        validate: (roles: string[]): boolean => roles.every((role: string) => isValidRole(role)),
+      },
     },
-    roles: {
-      type: Array,
-      required: true,
-      validate: (roles: string[]): boolean => roles.every((role: string) => isValidRole(role)),
-    },
-  })
+    { timestamps: true }
+  )
 )

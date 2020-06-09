@@ -1,47 +1,59 @@
 import mongoose from 'mongoose'
 
 export default mongoose.model(
-  'Organizations',
+  'Audit',
   new mongoose.Schema(
     {
-      name: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,
-      },
-      contactName: {
+      baseUrl: {
         type: String,
         required: true,
         trim: true,
       },
-      country: {
+      originalUrl: {
         type: String,
         required: true,
         trim: true,
       },
-      state: {
+      method: {
         type: String,
         required: true,
         trim: true,
       },
-      city: {
+      path: {
         type: String,
-        required: true,
         trim: true,
       },
-      email: {
+      reqOrgId: {
         type: String,
-        required: true,
-        lowercase: true,
         trim: true,
-        unique: true,
-        match: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       },
-      phone: {
+      reqId: {
         type: String,
-        required: true,
         trim: true,
+      },
+      putDiff: {
+        type: Object,
+      },
+      reqBody: {
+        type: Object,
+      },
+      resData: {
+        type: Object,
+      },
+      resMessage: {
+        type: String,
+      },
+      userName: {
+        type: String,
+      },
+      userId: {
+        type: String,
+      },
+      userOrgId: {
+        type: String,
+      },
+      userRole: {
+        type: String,
       },
     },
     { timestamps: true }
