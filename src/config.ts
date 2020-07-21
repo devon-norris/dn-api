@@ -58,7 +58,7 @@ let config: Config = {
 if (SERVER_ENV === environments.staging) {
   config = {
     ...config,
-    allowedOrigins: ['https://southend-staging.web.app'],
+    allowedOrigins: ['https://southend-staging.web.app', 'https://staging.devon-norris.com'],
     cookie: {
       ...config.cookie,
       secure: true,
@@ -71,7 +71,7 @@ if (SERVER_ENV === environments.staging) {
 if (SERVER_ENV === environments.production) {
   config = {
     ...config,
-    allowedOrigins: ['https://southend-fd01a.web.app'],
+    allowedOrigins: ['https://southend-fd01a.web.app', 'https://devon-norris.com'],
     cookie: {
       ...config.cookie,
       secure: true,
