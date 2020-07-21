@@ -16,7 +16,7 @@ if (checkUndefined.some(v => v === '')) throw new Error('Invalid environment var
 
 interface Config {
   port: string
-  origin: string
+  allowedOrigins: string[]
   tokenSecret: string
   cookie: {
     secret: string
@@ -39,7 +39,7 @@ interface Config {
 
 let config: Config = {
   port: PORT,
-  origin: 'http://localhost:3000',
+  allowedOrigins: ['http://localhost:3000'],
   tokenSecret: TOKEN_SECRET,
   cookie: {
     secret: COOKIE_SECRET,
@@ -58,7 +58,7 @@ let config: Config = {
 if (SERVER_ENV === environments.staging) {
   config = {
     ...config,
-    origin: '',
+    allowedOrigins: [],
     cookie: {
       ...config.cookie,
       secure: true,
@@ -71,7 +71,7 @@ if (SERVER_ENV === environments.staging) {
 if (SERVER_ENV === environments.production) {
   config = {
     ...config,
-    origin: '',
+    allowedOrigins: ['https://southend-fd01a.web.app'],
     cookie: {
       ...config.cookie,
       secure: true,

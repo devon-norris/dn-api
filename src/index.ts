@@ -1,14 +1,13 @@
 import express from 'express'
 import morgan from 'morgan'
-import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import helmet from 'helmet'
 import controllers from './controllers'
 import config from './config'
 import db from './db'
-import { permissions, validateJWT, notFound, handleError } from './middleware'
+import { permissions, validateJWT, notFound, handleError, cors } from './middleware'
 const server = express()
-const { loggingFormat, cookie, origin, port } = config
+const { loggingFormat, cookie, port } = config
 
 // Connect to DB
 db()
@@ -19,7 +18,7 @@ server.use(morgan(loggingFormat))
 server.use(express.urlencoded({ extended: false }))
 server.use(express.json())
 server.use(cookieParser(cookie.secret))
-server.use(cors({ origin, credentials: true }))
+server.use(cors)
 
 // Validate JWT
 server.use(validateJWT)
