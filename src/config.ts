@@ -58,7 +58,7 @@ let config: Config = {
 if (SERVER_ENV === environments.staging) {
   config = {
     ...config,
-    allowedOrigins: [],
+    allowedOrigins: ['https://southend-staging.web.app'],
     cookie: {
       ...config.cookie,
       secure: true,
